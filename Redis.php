@@ -45,13 +45,13 @@ class MageHost_Cm_Cache_Backend_Redis extends Cm_Cache_Backend_Redis
             $this->processRedisException( $e, 'constructor' );
         }
         if ( !$this->works ) {
-            $message = 'JeroenVermeulen_Cm_Cache_Backend_Redis: Disabled Redis cache backend because constructor failed';
+            $message = sprintf( '%s: Disabled Redis cache backend because constructor failed', __CLASS__ );
             Mage::log( $message, Zend_Log::ERR, 'exception.log' );
         }
     }
 
     /**
-     * This method will dispatch the event 'jv_cache_miss_jv' when a cache key miss occurs loading a key
+     * This method will dispatch the event 'magehost_cache_miss_mh' when a cache key miss occurs loading a key
      * from MageHost_BlockCache.
      * This method will return false when constructor failed.
      *
@@ -76,7 +76,10 @@ class MageHost_Cm_Cache_Backend_Redis extends Cm_Cache_Backend_Redis
             }
         }
         if ( false === $result && false !== strpos($id,'_JV_') ) {
-            Mage::dispatchEvent('jv_cache_miss_jv', array('id' => $id));
+            Mage::dispatchEvent('jv_cache_miss_jv', array('id' => $id)); // deprecated
+        }
+        if ( false === $result && false !== strpos($id,'_MH_') ) {
+            Mage::dispatchEvent('magehost_cache_miss_mh', array('id' => $id));
         }
         return $result;
     }
@@ -110,7 +113,7 @@ class MageHost_Cm_Cache_Backend_Redis extends Cm_Cache_Backend_Redis
      * This method will catch exceptions on Redis failure.
      * This method will return false when constructor failed.
      *
-     * This method will dispatch the event 'jv_cache_save_block' when cache is saved for a html block.
+     * This method will dispatch the event 'magehost_cache_save_block' when cache is saved for a html block.
      *
      * {@inheritdoc}
      */
@@ -121,7 +124,8 @@ class MageHost_Cm_Cache_Backend_Redis extends Cm_Cache_Backend_Redis
             $transportObject = new Varien_Object;
             /** @noinspection PhpUndefinedMethodInspection */
             $transportObject->setTags($tags);
-            Mage::dispatchEvent('jv_cache_save_block', array('id' => $id,'transport' => $transportObject));
+            Mage::dispatchEvent('jv_cache_save_block', array('id' => $id,'transport' => $transportObject)); // deprecated
+            Mage::dispatchEvent('magehost_cache_save_block', array('id' => $id,'transport' => $transportObject));
             /** @noinspection PhpUndefinedMethodInspection */
             $tags = $transportObject->getTags();
         }
@@ -168,7 +172,7 @@ class MageHost_Cm_Cache_Backend_Redis extends Cm_Cache_Backend_Redis
     }
 
     /**
-     * This method will dispatch the event 'jv_clean_backend_cache'.
+     * This method will dispatch the event 'magehost_clean_backend_cache'.
      * Event listeners can change the mode or tags.
      *
      * {@inheritdoc}
@@ -180,7 +184,8 @@ class MageHost_Cm_Cache_Backend_Redis extends Cm_Cache_Backend_Redis
         $transportObject->setMode( $mode );
         /** @noinspection PhpUndefinedMethodInspection */
         $transportObject->setTags( $tags );
-        Mage::dispatchEvent( 'jv_clean_backend_cache', array( 'transport' => $transportObject ) );
+        Mage::dispatchEvent( 'jv_clean_backend_cache', array( 'transport' => $transportObject ) ); // deprecated
+        Mage::dispatchEvent( 'magehost_clean_backend_cache', array( 'transport' => $transportObject ) );
         /** @noinspection PhpUndefinedMethodInspection */
         $mode = $transportObject->getMode();
         /** @noinspection PhpUndefinedMethodInspection */
@@ -313,7 +318,8 @@ class MageHost_Cm_Cache_Backend_Redis extends Cm_Cache_Backend_Redis
     }
 
     protected function processRedisException($e, $doing) {
-        $message = sprintf( "JeroenVermeulen_Cm_Cache_Backend_Redis: Caught Redis Exception during '%s'.\n%s",
+        $message = sprintf( "%s: Caught Redis Exception during '%s'.\n%s",
+                            __CLASS__,
                             $doing,
                             (string)$e );
         Mage::log( $message, Zend_Log::ERR, 'exception.log' );
