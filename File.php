@@ -24,8 +24,7 @@ class MageHost_Cm_Cache_Backend_File extends Cm_Cache_Backend_File
     protected $frontendPrefix = null;
 
     /**
-     * This method will dispatch the events 'magehost_clean_backend_cache_before'
-     *                                  and 'magehost_clean_backend_cache_after'.
+     * This method will dispatch the event 'magehost_clean_backend_cache'.
      * Event listeners can change the mode or tags.
      *
      * {@inheritdoc}
@@ -37,16 +36,12 @@ class MageHost_Cm_Cache_Backend_File extends Cm_Cache_Backend_File
         /** @noinspection PhpUndefinedMethodInspection */
         $transportObject->setTags( $tags );
         Mage::dispatchEvent( 'jv_clean_backend_cache', array( 'transport' => $transportObject ) ); // deprecated
-        Mage::dispatchEvent( 'magehost_clean_backend_cache_before', array( 'transport' => $transportObject ) );
+        Mage::dispatchEvent( 'magehost_clean_backend_cache', array( 'transport' => $transportObject ) );
         /** @noinspection PhpUndefinedMethodInspection */
         $mode = $transportObject->getMode();
         /** @noinspection PhpUndefinedMethodInspection */
         $tags = $transportObject->getTags();
-        $result = parent::clean($mode, $tags);
-        $transportObject->setResult( $result );
-        Mage::dispatchEvent( 'magehost_clean_backend_cache_after', array( 'transport' => $transportObject ) );
-        $result = $transportObject->getResult();
-        return $result;
+        return parent::clean($mode, $tags);
     }
 
     /**
@@ -58,8 +53,8 @@ class MageHost_Cm_Cache_Backend_File extends Cm_Cache_Backend_File
     public function load($id, $doNotTestCacheValidity = false) {
         $result = parent::load($id, $doNotTestCacheValidity);
         if ( false === $result && false !== strpos($id,'_JV_') ) {
-            Mage::dispatchEvent('jv_cache_miss_jv', array('id' => $id)); // deprecated
-            Mage::dispatchEvent('magehost_cache_miss_jv', array('id' => $id));
+            Mage::dispatchEvent('jv_cache_miss_jv', array('id' => $id));       // deprecated
+            Mage::dispatchEvent('magehost_cache_miss_jv', array('id' => $id)); // deprecated
         }
         if ( false === $result && false !== strpos($id,'_MH_') ) {
             Mage::dispatchEvent('magehost_cache_miss_mh', array('id' => $id));
