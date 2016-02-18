@@ -45,8 +45,8 @@ class MageHost_Cm_Cache_Backend_Redis extends Cm_Cache_Backend_Redis
             $this->processRedisException( $e, 'constructor' );
         }
         if ( !$this->works ) {
-            $message = sprintf( '%s: Disabled Redis cache backend because constructor failed', __CLASS__ );
-            Mage::log( $message, Zend_Log::ERR, 'exception.log' );
+            // We can't use Zend_Log here because it may not be loaded yet.
+            error_log( sprintf( '%s: Disabled Redis cache backend because constructor failed', __CLASS__ ) );
         }
     }
 
@@ -343,7 +343,8 @@ class MageHost_Cm_Cache_Backend_Redis extends Cm_Cache_Backend_Redis
                             __CLASS__,
                             $doing,
                             (string)$e );
-        Mage::log( $message, Zend_Log::ERR, 'exception.log' );
+        // We can't use Zend_Log here because it may not be loaded yet.
+        error_log( $message );
     }
 
     protected function getFrontendPrefix() {
