@@ -1,0 +1,4 @@
+# MageHost extended version of Colin Mollenhour's Cm_Cache_Backend_File and Cm_Cache_Backend_Redis
+
+File.php    app/code/community/MageHost/Cm/Cache/Backend/File.php
+Redis.php   app/code/community/MageHost/Cm/Cache/Backend/Redis.php
