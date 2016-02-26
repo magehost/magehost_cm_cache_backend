@@ -8,7 +8,7 @@ MageHost extended version of Colin Mollenhour's Cm_Cache_Backend_File and Cm_Cac
 * `cd` to your Magento root dir
 * `test -d .modman || modman init`
 * `modman clone --copy --force https://github.com/magehost/MageHost_Cm_Cache_Backend`
-* Add `.modman` to your `.gitignore`
+* Add `/.modman` to your `.gitignore`
 
 ### If you do not use Git
 * Consider to start using Git!
