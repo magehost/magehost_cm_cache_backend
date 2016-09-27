@@ -364,7 +364,9 @@ class MageHost_Cm_Cache_Backend_Redis extends Cm_Cache_Backend_Redis
         if ( is_null($result) ) {
             $result = false;
             $baseScript = basename($_SERVER['SCRIPT_FILENAME']);
-            if ( 0 === strpos($baseScript,'n98') || 0 === strpos($baseScript,'cron') ) {
+            if ( 0 === strpos($baseScript,'n98') ||
+                 0 === strpos($baseScript,'cron') ||
+                 0 === strpos($baseScript,'asyncindex') ) {
                 // CLI or Cron
                 $result = true;
             } else {
