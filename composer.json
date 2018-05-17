@@ -8,12 +8,11 @@
   "minimum-stability": "beta",
   "authors":[
     {
-      "name":"MagentoHosting.pro - Jeroen Vermeulen",
+      "name":"MageHost.pro - Jeroen Vermeulen",
       "email":"jeroen@magehost.pro"
     }
   ],
   "require":{
-    "magento-hackathon/magento-composer-installer":"*",
     "colinmollenhour/cache-backend-redis":"*",
     "colinmollenhour/cache-backend-file":"*"
   },
