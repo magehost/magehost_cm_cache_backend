@@ -1,9 +1,11 @@
 {
   "name":"magehost/magehost_cm_cache_backend",
-  "type":"magento-module",
+  "type": "magento2-module",
   "license":"GPL-3.0",
-  "homepage":"https://github.com/magehost/magehost_cm_cache_backend",
+  "version": "1.0.0",
+  "homepage":"https://github.com/magehost/magehost_cm_cache_backend/tree/magento2",
   "description":"MageHost_Cm_Cache_Backend: MageHost extended version of Colin Mollenhour's Cm_Cache_Backend_File and Cm_Cache_Backend_Redis",
+  "minimum-stability": "beta",
   "authors":[
     {
       "name":"MagentoHosting.pro - Jeroen Vermeulen",
@@ -14,5 +16,11 @@
     "magento-hackathon/magento-composer-installer":"*",
     "colinmollenhour/cache-backend-redis":"*",
     "colinmollenhour/cache-backend-file":"*"
+  },
+  "autoload": {
+    "classmap": [
+      "MageHost/Cm/Cache/Backend/Redis.php",
+      "MageHost/Cm/Cache/Backend/File.php"
+    ]
   }
 }
