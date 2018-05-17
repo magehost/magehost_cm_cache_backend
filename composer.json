@@ -2,7 +2,7 @@
   "name":"magehost/magehost_cm_cache_backend",
   "type": "magento2-module",
   "license":"GPL-3.0",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage":"https://github.com/magehost/magehost_cm_cache_backend/tree/magento2",
   "description":"MageHost_Cm_Cache_Backend: MageHost extended version of Colin Mollenhour's Cm_Cache_Backend_File and Cm_Cache_Backend_Redis",
   "minimum-stability": "beta",
