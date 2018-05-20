@@ -20,9 +20,6 @@
  */
 class MageHost_Cm_Cache_Backend_File extends Cm_Cache_Backend_File
 {
-    /** @var string|null */
-    protected $frontendPrefix = null;
-
     /**
      * This method will dispatch the events 'magehost_clean_backend_cache_before'
      *                                  and 'magehost_clean_backend_cache_after'.
@@ -31,12 +28,11 @@ class MageHost_Cm_Cache_Backend_File extends Cm_Cache_Backend_File
      * {@inheritdoc}
      */
     public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, $tags = array()) {
-        $transportObject = new Varien_Object;
+        $transportObject = new \Magento\Framework\DataObject();
         /** @noinspection PhpUndefinedMethodInspection */
         $transportObject->setMode( $mode );
         /** @noinspection PhpUndefinedMethodInspection */
         $transportObject->setTags( $tags );
-        Mage::dispatchEvent( 'jv_clean_backend_cache', array( 'transport' => $transportObject ) ); // deprecated
         Mage::dispatchEvent( 'magehost_clean_backend_cache_before', array( 'transport' => $transportObject ) );
         /** @noinspection PhpUndefinedMethodInspection */
         $mode = $transportObject->getMode();
@@ -47,49 +43,5 @@ class MageHost_Cm_Cache_Backend_File extends Cm_Cache_Backend_File
         Mage::dispatchEvent( 'magehost_clean_backend_cache_after', array( 'transport' => $transportObject ) );
         $result = $transportObject->getResult();
         return $result;
-    }
-
-    /**
-     * This method will dispatch the event 'magehost_cache_miss_mh' when a cache key miss occurs loading a key
-     * from MageHost_BlockCache.
-     *
-     * {@inheritdoc}
-     */
-    public function load($id, $doNotTestCacheValidity = false) {
-        $result = parent::load($id, $doNotTestCacheValidity);
-        if ( false === $result && false !== strpos($id,'_JV_') ) {
-            Mage::dispatchEvent('jv_cache_miss_jv', array('id' => $id)); // deprecated
-            Mage::dispatchEvent('magehost_cache_miss_jv', array('id' => $id));
-        }
-        if ( false === $result && false !== strpos($id,'_MH_') ) {
-            Mage::dispatchEvent('magehost_cache_miss_mh', array('id' => $id));
-        }
-        return $result;
-    }
-
-    /**
-     * This method will dispatch the event 'magehost_cache_save_block' when cache is saved for a html block.
-     *
-     * {@inheritdoc}
-     */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
-    {
-        if ( in_array( $this->getFrontendPrefix().'BLOCK_HTML', $tags ) ) {
-            $transportObject = new Varien_Object;
-            /** @noinspection PhpUndefinedMethodInspection */
-            $transportObject->setTags($tags);
-            Mage::dispatchEvent('jv_cache_save_block', array('id' => $id,'transport' => $transportObject));
-            Mage::dispatchEvent('magehost_cache_save_block', array('id' => $id,'transport' => $transportObject));
-            /** @noinspection PhpUndefinedMethodInspection */
-            $tags = $transportObject->getTags();
-        }
-        return parent::save( $data, $id, $tags, $specificLifetime );
-    }
-
-    protected function getFrontendPrefix() {
-        if ( is_null($this->frontendPrefix) ) {
-            $this->frontendPrefix = Mage::app()->getCacheInstance()->getFrontend()->getOption('cache_id_prefix');
-        }
-        return $this->frontendPrefix;
     }
 }
